@@ -13,7 +13,7 @@ logging.basicConfig(level=getattr(logging,LOG_LEVEL,logging.INFO),format='%(asct
 async def lifespan(app:FastAPI):
     init_db()
     yield
-app=FastAPI(title='Retail Order Service',version='1.0.0',lifespan=lifespan)
+app=FastAPI(title='Retail Lakehouse Platform — Order Service',version='1.0.0',lifespan=lifespan)
 app.mount('/static',StaticFiles(directory=Path(__file__).parent/'static'),name='static')
 app.include_router(router)
 @app.get('/',include_in_schema=False)

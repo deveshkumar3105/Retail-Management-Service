@@ -1,15 +1,19 @@
-# Local source-system architecture
+# Retail Lakehouse Platform — local source architecture
 
-Each bounded context will be an independently runnable Python/FastAPI application with its own SQLite file and domain logic. Services start without contacting one another. IDs are stable synthetic references; this phase does not enforce cross-service foreign keys because databases are intentionally isolated.
+The project is named **Retail Lakehouse Platform — Local Retail Source Systems**. It is a portfolio source-system project intended to feed a future lakehouse; AWS infrastructure is not implemented in this phase.
+
+Each bounded context is an independently runnable Python/FastAPI application with its own SQLite file and domain logic. Services start without contacting one another.
 
 ```text
-Order API → data/orders.db
+Order API    → data/orders.db
 Customer API → data/customers.db
-Product API → data/products.db
-Payment API → data/payments.db
-Returns API → data/returns.db
+Product API  → data/products.db (planned)
+Payment API  → data/payments.db (planned)
+Returns API  → data/returns.db (planned)
 ```
 
-The eventual ingestion path is REST or scheduled source export → S3 raw → Glue PySpark validation/quarantine → Iceberg curated tables → Glue Catalog/Athena. Airflow can orchestrate it later. This repository currently implements only Order Service, with no cloud credentials or cloud dependencies.
+Order Service runs on port 8000 and Customer Service on port 8001 when started together. Current synthetic Order records refer to customer IDs formatted `customer-00001` through `customer-02000`, randomly selected from that range. Customer Service seed IDs deliberately use the same format and deterministic numeric range, so the records can join on `customer_id` without a service call or shared database. A 500-customer seed only covers IDs 1–500; seed 2,000 customers for complete coverage of all current order references. Independently created API IDs are UUIDs and should not be expected to match an order's customer ID unless the caller supplies the intended ID. The services do not enforce cross-database foreign keys.
 
-Each service uses FastAPI schemas at the boundary, explicit SQLite transactions, integer cents, UTC ISO-8601 timestamps, and versioned records. Keep schema/domain code and the database file within the service boundary. For cross-service relationships, validate with deterministic IDs in generated fixtures; do not make service startup depend on synchronous calls to sibling services.
+The eventual ingestion path is REST or scheduled source export → S3 raw → Glue PySpark validation/quarantine → Iceberg curated tables → Glue Catalog/Athena. Airflow orchestration can be added later. No cloud credentials or external services are needed for local development.
+
+Both services use FastAPI schemas at the boundary, explicit SQLite transactions, UTC ISO-8601 timestamps, and source versions. Order money is stored as integer cents. Customer changes additionally use a transactionally written append-only change log with a monotonic sequence. See `source-data-contracts.md` for ingestion contracts and limits.
