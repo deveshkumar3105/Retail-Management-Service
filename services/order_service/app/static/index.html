@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f5f3ee"><title>Order Desk · Retail Source</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+  <header class="topbar"><a class="brand" href="/"><span class="brand-mark">R</span><span>RETAIL SOURCE<small>LOCAL DATA EXPLORER</small></span></a><nav><a class="active" href="/">Orders</a><a href="/docs">API docs ↗</a></nav><span class="connection"><i></i> Local database</span></header>
+  <main>
+    <section class="intro"><div><p class="eyebrow">SOURCE SYSTEM / ORDER SERVICE</p><h1>Order desk<span>.</span></h1><p class="lede">A clear view of the synthetic orders in your local database. Pick an order to see what’s inside.</p></div><a class="export" href="/exports/orders" download="orders.jsonl"><span>↓</span> Export data</a></section>
+    <section class="summary" aria-label="Order summary">
+      <article class="metric"><span class="metric-label">ALL ORDERS <span class="info" title="Every order currently in the local database">i</span></span><strong id="total-count">—</strong><small>In your local database</small></article>
+      <article class="metric"><span class="metric-label">DELIVERED</span><strong id="delivered-count">—</strong><small>Successfully completed</small></article>
+      <article class="metric"><span class="metric-label">IN PROGRESS</span><strong id="progress-count">—</strong><small>Created, confirmed, or shipped</small></article>
+      <article class="metric"><span class="metric-label">ORDER VALUE</span><strong id="total-value">—</strong><small>Combined value of all orders</small></article>
+    </section>
+    <section class="panel">
+      <div class="panel-heading"><div><p class="eyebrow">YOUR DATA</p><h2>Orders <span id="result-count" class="count"></span></h2></div><span id="updated-label" class="muted"></span></div>
+      <div class="toolbar"><label class="search"><span>⌕</span><input id="search" type="search" placeholder="Find an order, customer, or product…" autocomplete="off"><kbd>⌘ K</kbd></label><label class="filter-label">STATUS <select id="status"><option value="">All statuses</option><option>CREATED</option><option>CONFIRMED</option><option>SHIPPED</option><option>DELIVERED</option><option>CANCELLED</option></select></label></div>
+      <div class="table-wrap"><table><thead><tr><th>ORDER</th><th>CUSTOMER</th><th>PLACED</th><th>STATUS</th><th class="right">TOTAL</th><th></th></tr></thead><tbody id="orders"><tr><td colspan="6" class="empty">Loading your orders…</td></tr></tbody></table></div>
+      <div class="table-footer"><span id="page-label">—</span><div class="pager"><button id="prev" aria-label="Previous page">←</button><button id="next" aria-label="Next page">→</button></div></div>
+    </section>
+    <footer><span>All records are synthetic. No real customer or payment data.</span><span><a href="/health">Service health</a><span class="dot">·</span><a href="/docs">How the API works</a></span></footer>
+  </main>
+  <dialog id="detail"><button class="close" aria-label="Close">×</button><div id="detail-content"></div></dialog>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script src="/static/app.js" defer></script>
+</body>
+</html>
