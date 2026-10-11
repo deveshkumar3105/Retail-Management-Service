@@ -1,15 +1,15 @@
-# Retail Data Platform — Phase 1
+# Retail Lakehouse Platform — Local Retail Source Systems
 
-A local synthetic Order Service built with FastAPI and SQLite. This phase intentionally implements one working source system; the future AWS lakehouse is not included.
+A portfolio project containing independent synthetic retail source applications built with FastAPI and SQLite. The Order and Customer Services are implemented; Product, Payment, and Returns are planned. The future AWS lakehouse is not included yet.
 
 ## macOS setup and run
 
 ```bash
 ./scripts/setup_mac.sh
 source .venv/bin/activate
-pytest services/order_service/tests -q
+pytest services/order_service/tests services/customer_service/tests -q
 python services/order_service/scripts/seed_orders.py --count 500 --seed 42
-uvicorn services.order_service.app.main:app --reload
+uvicorn services.order_service.app.main:app --reload --port 8000
 ```
 
 The UI is at `http://127.0.0.1:8000/`; it shows order summaries, search and status filters, item details, and an export link. The API docs are at `http://127.0.0.1:8000/docs`; health check: `http://127.0.0.1:8000/health`; Swagger UI: `http://127.0.0.1:8000/docs`.
@@ -43,3 +43,17 @@ See [docs/source-data-contracts.md](docs/source-data-contracts.md) for the JSONL
 ## Continue the ecosystem
 
 See [docs/architecture.md](docs/architecture.md) and [docs/next-steps.md](docs/next-steps.md) for service boundaries and implementation-ready plans for Customer, Product, Payment, and Returns services.
+
+## Customer Service
+
+In another terminal, start the independent Customer Service on port 8001:
+
+```bash
+source .venv/bin/activate
+python services/customer_service/scripts/seed_customers.py --count 2000 --seed 42
+uvicorn services.customer_service.app.main:app --reload --port 8001
+```
+
+Customer UI: `http://127.0.0.1:8001/`; it provides profile search, status filtering, customer details, and change history. Customer API: `http://127.0.0.1:8001`; Swagger UI: `http://127.0.0.1:8001/docs`; health: `http://127.0.0.1:8001/health`. Export the current snapshot at `/exports/customers`; export sequence changes with `/exports/customers?after_seq=0`. `GET /customers/changes?after_seq=0` returns a page and its next checkpoint.
+
+Customer data lives only in `data/customers.db`. Synthetic seeded customer IDs use the same `customer-00001` format as the Order Service. Seed 2,000 customer records to cover the Order Service fixture's full possible customer ID range. See [PROJECT_STATUS.md](PROJECT_STATUS.md), [docs/source-data-contracts.md](docs/source-data-contracts.md), and [docs/next-steps.md](docs/next-steps.md).

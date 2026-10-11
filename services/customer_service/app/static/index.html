@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f5f3ee"><title>Customer Directory · Retail Lakehouse Platform</title><link rel="stylesheet" href="/static/styles.css"></head>
+<body>
+<header class="topbar"><a class="brand" href="/"><span class="brand-mark">R</span><span>RETAIL LAKEHOUSE PLATFORM<small>LOCAL RETAIL SOURCE SYSTEMS</small></span></a><nav><a class="active" href="/">Customers</a><a href="/docs">API docs ↗</a></nav><span class="connection"><i></i> Local database</span></header>
+<main>
+<section class="intro"><div><p class="eyebrow">SOURCE SYSTEM / CUSTOMER SERVICE</p><h1>Customer directory<span>.</span></h1><p class="lede">Browse fictional customer profiles stored on this computer. Select a person to see their profile and change history.</p></div><a class="export" href="/exports/customers" download="customers.jsonl"><span>↓</span> Export data</a></section>
+<section class="summary"><article class="metric"><span class="metric-label">ALL CUSTOMERS</span><strong id="total">—</strong><small>In your local database</small></article><article class="metric"><span class="metric-label">ACTIVE</span><strong id="active">—</strong><small>Available as current profiles</small></article><article class="metric"><span class="metric-label">INACTIVE</span><strong id="inactive">—</strong><small>Retained for source history</small></article><article class="metric"><span class="metric-label">PROFILE CHANGES</span><strong id="events">—</strong><small>Sequence-numbered updates</small></article></section>
+<section class="panel"><div class="panel-heading"><div><p class="eyebrow">YOUR DATA</p><h2>Customers <span id="result-count" class="count"></span></h2></div><span id="loaded" class="muted"></span></div>
+<div class="toolbar"><label class="search"><span>⌕</span><input id="search" type="search" placeholder="Find a customer, email, or city…" autocomplete="off"><kbd>⌘ K</kbd></label><label class="filter-label">STATUS <select id="status"><option value="">All statuses</option><option>ACTIVE</option><option>INACTIVE</option></select></label></div>
+<div class="table-wrap"><table><thead><tr><th>CUSTOMER</th><th>EMAIL</th><th>LOCATION</th><th>STATUS</th><th>VERSION</th><th></th></tr></thead><tbody id="rows"><tr><td colspan="6" class="empty">Loading customer profiles…</td></tr></tbody></table></div>
+<div class="table-footer"><span id="page-label">—</span><div class="pager"><button id="prev" aria-label="Previous page">←</button><button id="next" aria-label="Next page">→</button></div></div></section>
+<footer><span>All profiles are synthetic. Email addresses use the reserved .invalid domain.</span><span><a href="/health">Service health</a><span class="dot">·</span><a href="/docs">How the API works</a></span></footer></main>
+<dialog id="detail"><button class="close" aria-label="Close">×</button><div id="detail-content"></div></dialog><div id="toast" role="status" aria-live="polite"></div><script src="/static/app.js" defer></script>
+</body></html>
